@@ -168,7 +168,7 @@ void *justdoit(void *connfd)
     
     int clientfd = open_clientfd(hostname, port);
     //printf("port is: %d\n", port);
-    printf("something about git\n");
+    //printf("something about git\n");
     printf("clientfd is: %d\n", clientfd);
     
     sprintf(buf, "GET %s HTTP/1.0\r\n", pathname);
