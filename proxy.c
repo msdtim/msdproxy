@@ -85,7 +85,7 @@ void *justdoit(void *connfd)
 	
 	//forward request 
 
-	//handle request header
+	//handleing request header
 	
 	//strcat(newuri, " http://");
 	//strcat(newuri, hostname);
