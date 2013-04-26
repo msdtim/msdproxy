@@ -1,0 +1,113 @@
+fd is: 4
+we got something
+clientfd is: 5
+BODY: <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type"/>
+	<meta content="Carnegie Mellon University (CMU)" name="author"/>
+	<meta content="Carnegie Mellon University (CMU) is a global research university recognized for world-class arts and technology programs, collaboration across disciplines and innovative leadership in education." name="description"/>
+        <meta content="CMU, arts, technology, science, policy, business, humanities, engineering, energy, environment, health, brain, wellness, creativity, global, society, economy, computing, graduate, undergraduate, research, interdisciplinary, finance, computer, interaction, entertainment" name="keywords"/>
+	<meta content="index,follow" name="robots"/>
+	<meta content="31 days" name="revisit-after"/>
+	<meta content="196196853731202" property="fb:app_id"/>
+        <link href="homecss/cmu.css" rel="stylesheet" type="text/css"/>
+<link href="homecss/cmu-new.css" rel="stylesheet" type="text/css"/>
+<link href="homecss/cmu-new-print.css" media="print" rel="stylesheet" type="text/css"/>
+        <link href="http://www.cmu.edu/RSS/stories.rss" rel="alternate" title="Carnegie Mellon Homepage Stories" type="application/rss+xml"/>
+        <script language="JavaScript" src="js/dojo.js" type="text/javascript"></script>
+<script language="JavaScript" src="js/scripts.js" type="text/javascript"></script>
+<script language="javascript" src="js/jquery.js" type="text/javascript"></script>
+<script language="javascript" src="js/homepage.js" type="text/javascript"></script>
+<!--[if IE 6]>
+<script language="javascript" src="http://www.cmu.edu/js/dd_belatedpng.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">DD_belatedPNG.fix('a.btn_mm, #photo-credit, #multimedia, #article')</script>
+<![endif]-->
+<!--[if lte IE 7]><style type="text/css">#feature #multimedia #embed * {width:473px}</style><![endif]-->
+<script language="javascript" src="js/app_ad.js" type="text/javascript"></script>
+         <!--GA Async added 5/21/12 -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9172041-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+        
+        
+	<title>Carnegie Mellon University | CMU</title>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" id="table" width="244px">
+<tbody>
+<tr>
+<td align="left" class="home_leftnav_bg" valign="top" width="244">
+
+<h1><a href="/index.shtml" id="wordmark" title="Carnegie Mellon University | CMU"><img alt="Carnegie Mellon University | CMU" border="0" src="homeimages/CarnegieMellonUniversity_wordmark.gif"/><span class="visuallyhidden">Carnegie Mellon University | CMU</span></a></h1>
+<div class="home_leftColumn">
+        <form action="http://web-search.andrew.cmu.edu/search" id="search"><input name="entqr" type="hidden" value="3"/><input name="entsp" type="hidden" value="a"/><input name="sort" type="hidden" value="date:D:L:d1"/><input name="output" type="hidden" value="xml_no_dtd"/><input name="client" type="hidden" value="default_frontend"/><input name="ud" type="hidden" value="1"/><input name="oe" type="hidden" value="UTF-8"/><input name="ie" type="hidden" value="UTF-8"/><input name="proxystylesheet" type="hidden" value="default_frontend"/><input class="searchInput" id="searchterm" maxlength="100" name="q" onfocus="clear_search(this)" tabindex="1" title="Enter keywords to search the site" type="text" value="SEARCH"/>
+        <input align="middle" alt="Search the Carnegie Mellon University Website" class="searchImage" src="homeimages/btn_go.gif" tabindex="4" title="Search the Carnegie Mellon University Website" type="image"/><br/><input name="site" type="hidden" value="default_collection"/></form>
+        <form action="#"><select id="quicklinks" onchange="selectQuickLink(this);" title="The QuickLinks is a combo-box that automatically jumps to the page that you select.">
+<option>QUICKLINKS:</option>
+<option value="http://www.cmu.edu/campaign">Inspire Innovation: The Campaign for CMU</option>
+<option value="https://securelb.imodules.com/s/1410/giving/form.aspx?sid=1410&amp;gid=1&amp;pgid=382&amp;cid=990&amp;appealcode=A1640">Support CMU</option>
+<option value="http://www.cmu.edu/hub">The Hub</option>
+<option value="academics/schools.shtml">Colleges &amp; Schools</option>
+<option value="http://www.cit.cmu.edu">&#160; -Carnegie Institute of Technology</option>
+<option value="http://cfa.cmu.edu">&#160; -College of Fine Arts</option>
+<option value="http://www.hss.cmu.edu">&#160; -Dietrich College: Humanities &amp; Social Sci.</option>
+<option value="http://tepper.cmu.edu">&#160; -Tepper School of Business</option>
+<option value="http://www.heinz.cmu.edu">&#160; -Heinz College: IS &amp; Public Policy Mgmnt.</option>
+<option value="http://www.cmu.edu/mcs">&#160; -Mellon College of Science</option>
+<option value="http://www.cs.cmu.edu">&#160; -School of Computer Science</option>
+<option value="about/administrative.shtml">Administrative Departments</option>
+<option value="http://www.cmu.edu/stores">University Stores</option>
+<option value="http://www.cmu.edu/global">Locations</option>
+</select></form>
+</div>
+	<div class="home_LeftNavRed">
+        <!-- Begin Red Main Navigation --><div class="LeftNavRed_Home"><a class="LeftNavRed_Home_Link" href="academics/index.shtml">Academics</a></div>
+<div class="LeftNavRed_Home"><a class="LeftNavRed_Home_Link" href="research/index.shtml">Research</a></div>
+<div class="LeftNavRed_Home"><a class="LeftNavRed_Home_Link" href="student-life/index.shtml">Student Life</a></div>
+<div class="LeftNavRed_Home"><a class="LeftNavRed_Home_Link" href="http://athletics.cmu.edu/landing/index">Athletics</a></div>
+<div class="LeftNavRed_Home"><a class="LeftNavRed_Home_Link" href="about/index.shtml">About Us</a></div>
+<!-- End Red Main Navigation -->
+	</div>
+
+	
+	<div class="home_LeftNavGray">
+        <!-- Begin Gray Sub Navigation --><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="prospective/index.shtml">Prospective Students</a></div><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="current-students/index.shtml">Current Students </a></div><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="faculty-staff/index.shtml">Faculty &#38; Staff</a><a class="LeftNavGray_Home_Link" href="http://alumni.cmu.edu/"></a></div><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="http://www.cmu.edu/alumni">Alumni</a></div><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="parents/index.shtml">Parents &#38; Family</a></div><div class="LeftNavGray_Home"><a class="LeftNavGray_Home_Link" href="corporate/index.shtml">Corporate Visitors</a></div><!-- End Gray Sub Navigation -->
+	</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- No alert as of Fri Apr 19 13:44:06 2013. -->
+
+<div id="topnav">
+	<ul>
+<li class="first"><a href="http://directory.andrew.cmu.edu/" title="Carnegie Mellon University Faculty, Staff and Student Directory">Directory Search</a></li>
+<li><a href="news/index.shtml" title="Carnegie Mellon University News">News</a></li>
+<li><a href="http://www.cmu.edu/events" title="Carnegie Mellon University Events Calendar">Calendar</a></li>
+<li><a href="http://search.library.cmu.edu/" title="Carnegie Mellon University Libraries">Libraries</a></li>
+<li><a href="http://www.cmu.edu/jobs/" title="Careers at Carnegie Mellon University">Careers</a></li>
+<li><a href="https://securelb.imodules.com/s/1410/giving/form.aspx?sid=1410&amp;gid=1&amp;pgid=382&amp;cid=990&amp;appealcode=A1640" title="Support CMU by giving to Carnegie Mellon University">Support CMU</a></li>
+</ul>
+	<span id="socialLinks"> <a href="http://www.cmu.edu/RSS/stories.rss" id="rss" target="_blank" title="Carnegie Mellon University Story Feed">Carnegie Mellon University Story Feed</a> <a href="http://www.facebook.com/carnegiemellonu" id="facebook" target="_blank" title="Carnegie Mellon University on Facebook">Carnegie Mellon University on Facebook</a> <a href="http://twitter.com/carnegiemellon" id="twitter" target="_blank" title="Carnegie Mellon University on Twitter">Carnegie Mellon University on Twitter</a> <a href="http://www.youtube.com/carnegiemellonu" id="youtube" target="_blank" title="Carnegie Mellon University on YouTube">Carnegie Mellon University on YouTube</a> <a href="http://www.cmu.edu/itunesu/" id="itunesu" title="Carnegie Mellon University on iTunes U">Carnegie Mellon University on iTunes U</a> <a href="http://www.cmu.edu/social-media/index.shtml" id="more" title="See more of our social networks">See more of our social networks</a> </span>
+</div>
+
+<div id="feature" style="background:url(/cmufront/homepage/images/2013/incredible_edible_748x460.jpg)"><div id="article"><small>Health &amp; Wellness</small><h2>Incredible Edible</h2><img alt="Incredible Edible" src="homepage/images/2013/incredible_edible_748x460.jpg"/><p>Stimulating damaged tissue, bio-sensing gastric health, targeting drug delivery and more could soon be as easy as popping your morning multivitamin &#8212; thanks to the joint work of Carnegie Mellon University's Christopher Bettinger and Jay Whitacre.<br/>
+<br/>
+The two cutting-edge researchers have combined forces to develop edible electronic devices &#8212; no larger than ordinary pills &#8212; to improve medical care.</p><p><a class="btn" href="http://www.cmu.edu/homepage/health/2013/spring/incredible-edible.shtml">Read more &#187;
+                  </a></p><em id="photo-credit">Rendering: graphic demonstration of device</em><small id="article-links"><a href="/homepage/submit/">Submit a Story</a> |
+                <a href="/homepage/">Story Archives</a></small></div></div><div id="homepageContent"><div><h2>Health &amp; Wellness</h2><a href="http://www.cmu.edu/homepage/health/2011/fall/meet-popchilla.shtml"><img alt="Autism" src="homepage/images/2013/autism_research_month_240x126.jpg"/></a><h3>Meet Popchilla</h3><p>April is Autism Awareness month, but CMU researchers and alumni think about it year-round, as they work to understand autism, its mysteries, and find the best ways for families to cope with the disability.</p><p><a class="btn" href="http://www.cmu.edu/homepage/health/2011/fall/meet-popchilla.shtml">Read more &#187;
+              </a></p></div><div><h2>Health &amp; Wellness</h2><a href="http://www.cmu.edu/homepage/health/2013/spring/revolutionizing-how-we-learn.shtml"><img alt="Revolutionizing How We Learn" src="homepage/images/2013/john_anderson_240x126.jpg"/></a><h3>Revolutionizing How We Learn</h3><p>A Franklin Institute Laureate and recent recipient of an Association for Psychological Science lifetime achievement award, CMU's John Anderson is revolutionizing how we learn &#8212; and teaching students to do the same.</p><p><a class="btn" href="http://www.cmu.edu/homepage/health/2013/spring/revolutionizing-how-we-learn.shtml">Read more &#187;
+              </a></p></div><div class="last"><h2>Creativity &amp; the Arts</h2><a href="http://www.cmu.edu/homepage/creativity/2013/spring/an-inspirational-noise.shtml"><img alt="An Inspirational NOISE" src="homepage/images/2013/watson_festival_240x126.jpg"/></a><h3>An Inspirational NOISE</h3><p>The CMU community came together on a recent April weekend to enjoy performances, workshops, instruments &#8212; and the unexpected. They were celebrating NOISE &#8212; at the 2013 wats:ON? Festival.</p><p><a class="btn" href="http://www.cmu.edu/homepage/creativity/2013/spring/an-inspirational-noise.shtml">Read more &#187;
+              </a></p></div><div id="homepagePromo"><span><a href="http://www.cmu.edu/global" target="_blank"><img alt="Carnegie Mellon's Global Presence" src="homeimages/global.gif"/></a></span><span><a hr

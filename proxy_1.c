@@ -34,7 +34,6 @@ int main(int argc, char **argv)
     struct sockaddr_in clientaddr;
     // struct Cache_List *
     init_cache();
-    //printf("lalallal\n");
     
     socklen_t clientlen = sizeof(struct sockaddr_in);
     
@@ -175,7 +174,7 @@ void *justdoit(void *connfd)
 	
     struct Block *block;
     if ((block = find_block(uri)) != NULL) {
-        printf("Find Block!!!\n");
+        printf("Find Block!!!\n")
         Rio_writen(fd, block->head, strlen(block->head));
         Rio_writen(fd, block->body, strlen(block->body));
         move_to_tail(block);
