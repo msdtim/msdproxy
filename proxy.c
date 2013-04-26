@@ -15,7 +15,7 @@ int read_requesthdrs(rio_t *rp, char *host, char *requesthdrs);
 
 int main(int argc, char **argv)
 {
-    pthread_t tid;
+    //pthread_t tid;
 
     
     if (argc != 2) {
@@ -35,8 +35,8 @@ int main(int argc, char **argv)
         connfd = Malloc(sizeof(int));
         *connfd = Accept(listenfd,(SA *)&clientaddr, &clientlen);
         
-        Pthread_create(&tid, NULL, justdoit, connfd);
-        
+        //Pthread_create(&tid, NULL, justdoit, connfd);
+        justdoit(connfd);
         
     }
 }
@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 void *justdoit(void *connfd)
 {
     int fd = *((int *) connfd);
-    printf("in the thread: \n");
-    Pthread_detach(pthread_self());
+    //printf("in the thread: \n");
+    //Pthread_detach(pthread_self());
 
     int is_static;
     struct stat sbuf;
