@@ -175,14 +175,19 @@ void *justdoit(void *connfd)
 	
     struct Block *block;
     if ((block = find_block(uri)) != NULL) {
-        printf("Find Block!!!\n");
+        printf("Find Block with the uri: %s\n", block->uri);
+        //printf("%s\n", block->head);
+
         Rio_writen(fd, block->head, strlen(block->head));
         Rio_writen(fd, block->body, strlen(block->body));
         move_to_tail(block);
         Close(fd);
         return NULL;
     }
+
+    printf("Didn't find Block :( \n");
     
+    //clientfd is server
     int clientfd = open_clientfd(hostname, port);
     //printf("port is: %d\n", port);
     //printf("something about git\n");
@@ -231,7 +236,7 @@ void *justdoit(void *connfd)
         if((strcmp(buf, "\r\n") == 0) || (strcmp(buf, "\n") == 0))
             break;
     }
-    
+    //printf("head: %s\n", head);
     Rio_writen(fd, head, strlen(head));
     
     bodysize = 0;
@@ -244,6 +249,8 @@ void *justdoit(void *connfd)
     }
 
     update_cache(uri, head, body, headsize, bodysize);
+
+    print_cache();
 
     // add_block(uri, body, bodysize);
     

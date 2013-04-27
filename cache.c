@@ -31,26 +31,35 @@ void init_cache()
 
 // check a block can add to cache or not
 int update_cache(char *uri, char *head, char *body, int headsize, int bodysize) {
-	struct Block newblock;
+	struct Block *newblock;
+	newblock = (struct Block *)malloc(sizeof(struct Block));
 
-	if (uri == NULL || body == NULL || bodysize < 1 || headsize < 1) {
+	if (uri == NULL) {
 		printf("Error newblock. Cannot add.\n");
+		free(newblock);
 		return -1;
 	}
 
 	// larger than MAX_OBJECT_SIZE, do nothing
-	if (headsize + bodysize > MAX_OBJECT_SIZE) {
+	if (bodysize > MAX_OBJECT_SIZE) {
+		free(newblock);
 		return 0;
 	}
 
-	newblock.body = malloc(bodysize*sizeof(char));
-	newblock.head = malloc(headsize*sizeof(char));
-	newblock.uri = uri;
-	newblock.blocksize = bodysize + headsize;
+	newblock->body = malloc(strlen(body)*sizeof(char));
+	newblock->head = malloc(strlen(head)*sizeof(char));
+	newblock->uri = malloc(strlen(uri)*sizeof(char));
+	strcpy(newblock->body, body);
+	strcpy(newblock->head, head);
+	strcpy(newblock->uri, uri);
+	newblock->blocksize = bodysize;
 
-	add_block(&newblock);
 
-	if (cachesize > MAX_CACHE_SIZE) {
+
+
+	add_block(newblock);
+
+	while (cachesize > MAX_CACHE_SIZE) {
 		remove_block(header);
 	}
 
@@ -58,7 +67,7 @@ int update_cache(char *uri, char *head, char *body, int headsize, int bodysize) 
 }
 
 // Add a block to tail of cachelist
-void add_block(struct Block * newblock) {
+void add_block(struct Block *newblock) {
 	// if newblock is not NULL, add to tail
 	if (header == NULL) {		// cachelist is empty
 		header = newblock;
@@ -160,4 +169,21 @@ struct Block *find_block(char *uri) {
 	}
 
 	return NULL;
+}
+
+void print_cache(){
+	struct Block *itr = tailer;
+	if (itr == NULL)
+	{
+		printf("Cache is empty!!!!!!!!!\n");
+	}
+
+	int idx = 0;
+	while (itr != NULL){
+
+		printf("%d:\nuri: %s\nsize: %d\n\n",idx,itr-> uri, itr->blocksize);
+		itr = itr->next;
+		idx++;
+	}
+	return;
 }

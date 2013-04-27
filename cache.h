@@ -31,3 +31,5 @@ void move_to_tail(struct Block *block);
 struct Block *find_block(char *uri);
 //char *find_body(char *uri);
 int update_cache(char *uri, char *head, char *body, int headsize, int bodysize);
+
+void print_cache();
