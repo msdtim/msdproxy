@@ -11,12 +11,25 @@ static const char *conn_str = "Connection: close\r\n";
 
 void *justdoit(void *connfd);
 int parse_uri(char *uri, char *hostname, char *pathname, int *port);
-int read_requesthdrs(rio_t *rp, char *host, char *requesthdrs);
+int read_requesthdrs(rio_t *rio, char *hostname, char *requesthdrs);
+void proxyerror(int fd, char *cause, char *errnum,
+                 char *shortmsg, char *longmsg);
+void int_handler(int sig);
+
+void int_handler(int sig)
+{
+    printf("Exit\n");
+    //free_cache();
+    exit(0);
+}
+
+
 
 int main(int argc, char **argv)
 {
     //pthread_t tid;
-
+    Signal(SIGPIPE, SIG_IGN);
+    Signal(SIGINT, int_handler);
     
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <port number>\n", argv[0]);
@@ -32,237 +45,197 @@ int main(int argc, char **argv)
     socklen_t clientlen = sizeof(struct sockaddr_in);
     
     while (1) {
-        connfd = Malloc(sizeof(int));
+        connfd = malloc(sizeof(int));
         *connfd = Accept(listenfd,(SA *)&clientaddr, &clientlen);
         
         //Pthread_create(&tid, NULL, justdoit, connfd);
         justdoit(connfd);
-        
     }
+    return 0;
 }
+
 
 void *justdoit(void *connfd)
 {
-    int fd = *((int *) connfd);
-    //printf("in the thread: \n");
-    //Pthread_detach(pthread_self());
+    int client = *((int *) connfd);
+    Free(connfd);
+    Pthread_detach(pthread_self());
 
-    int is_static;
-    struct stat sbuf;
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
-    char filename[MAXLINE], cgiargs[MAXLINE];
-	char hostname[MAXLINE], pathname[MAXLINE];
+    char hostname[MAXLINE], pathname[MAXLINE];
 	int port;    
-	char newuri[MAXLINE];
-
+	//char newuri[MAXLINE];
 
     rio_t rio;
-    printf("fd is: %d\n", fd);
-    Rio_readinitb(&rio, fd);
-    Rio_readlineb(&rio, buf, MAXLINE);
-    
-    sscanf(buf, "%s %s %s", method, uri, version);
-    //printf("%s %s %s\n", method, uri, version);
-    if (strcasecmp(method, "GET")) {
-        printf("we did not got something\n");
-        return;
+    Rio_readinitb(&rio, client);
+    if (Rio_readlineb(&rio, buf, MAXLINE) < 0){
+        Close(client);
+        return NULL;
+    }
 
+    sscanf(buf, "%s %s %s", method, uri, version);
+    if (strcasecmp(method, "GET")) {
+        proxyerror(client, method, "501", "Not Implemented",
+                    "Tiny Proxy does not implement this method");
+        Close(client);
+        return NULL;
     }
     else{
-        printf("we got something\n");
-		int flag = parse_uri(uri, hostname, pathname, &port);
-
-		if (flag != 1){
-			printf("parse failed");
+		if (parse_uri(uri, hostname, pathname, &port) == 0){
+			proxyerror(client, uri, "400", "Bad request",
+                       "Tiny Proxy cannot parse the URI");
+            Close(client);
+            return NULL;
 		}
     }
     char requesthdrs[MAXLINE];
     
-    
-    int ret = read_requesthdrs(&rio, hostname, requesthdrs);
-    
-	//got the hostname and the pathname, port = 80
-	
-	//forward request 
-
-	//handleing request header
-	
-	//strcat(newuri, " http://");
-	//strcat(newuri, hostname);
-	//strcat(newuri, ":80");
-	/*if (pathname[0] != '\0'){
-		strcat(newuri, " /");
-		strcat(newuri, pathname);
-	}
-	else{
-		strcat(newuri, " http://");
-		strcat(newuri, hostname);
-		
-		//strcat(newuri, ":80");
-		strcat(newuri, " /");
-	}
-	strcat(newuri, " HTTP/1.0");
-	newuri[strlen(newuri)] = '\0';*/
-
-	//int clientfd = Open_clientfd(hostname, 80);//!!!!!!!!!!!!!!!!!!!!!!
-	/*rio_t* rio2;
-	int n = 0;
-	Rio_readinitb(&rio2, clientfd);
-	
-
-	if (pathname[0] != '\0'){
-		strcpy(newuri, method);
-		strcat(newuri, " /");
-		strcat(newuri, pathname);
-		strcat(newuri, " HTTP/1.0");
-		newuri[strlen(newuri)] = '\0';
-		printf("newuri = %s\n", newuri);
-		Rio_writen(clientfd,newuri,strlen(newuri));
-	}
-	else{
-		strcpy(newuri, method);
-		strcat(newuri, " http://");
-		strcat(newuri, hostname);
-		
-		//strcat(newuri, ":80");
-		
-		strcat(newuri, "//");
-		strcat(newuri, " HTTP/1.0");
-		newuri[strlen(newuri)] = '\0';
-		printf("newuri = %s\n", newuri);
-		Rio_writen(clientfd,newuri,strlen(newuri));
-	}*/
-
-
-	/*while ((n = Rio_readlineb(&rio,buf,MAXLINE)) != 0){
-		if (strstr(buf, "User-Agent:") != NULL) {
-			strcpy(buf,user_agent);
-		}
-		else if (strstr(buf, "Accept:") != NULL) {
-			strcpy(buf,accept_str);	
-		}
-		else if (strstr(buf, "Accept-Encoding:") != NULL) {
-			strcpy(buf,accept_encoding);
-		}
-		else if (strstr(buf, "Proxy-Connection:") != NULL) {
-			strcpy(buf,proxy_conn);
-		}
-		else if (strstr(buf, "Connection:") != NULL) {
-			strcpy(buf,conn_str);
-		}
-		
-		n = strlen(buf);
-
-
-		Rio_writen(clientfd, buf,n);
-
-		if (!strcmp(buf, "\r\n")){
-			//Rio_writen(clientfd, (char* )conn_str, strlen(conn_str));
-			//Fputs(conn_str,stdout);
-			printf("reach the end\n");
-			break;		
-		}
-		Fputs(buf,stdout);
-	}*/
+    int read_ret = read_requesthdrs(&rio, hostname, requesthdrs);
+    if (read_ret == -1) {
+        Close(client);
+        return NULL;
+    }
+    else if (read_ret == -0){
+        proxyerror(client, uri, "500", "Internal server error",
+                   "Tiny Proxy cannot handle such a long request header");
+        Close(client);
+        return NULL;
+    }
 	
     
-    int clientfd = open_clientfd(hostname, port);
+    int server = open_clientfd(hostname, port);
+    
+    
     //printf("port is: %d\n", port);
     //printf("something about git\n");
-    printf("clientfd is: %d\n", clientfd);
+    printf("server is: %d\n", server);
     
-    sprintf(buf, "GET %s HTTP/1.0\r\n", pathname);
     //printf("GET Line is: %s\n", buf);
-    
-    Rio_writen(clientfd, buf, strlen(buf));
-    Rio_writen(clientfd, (void *)user_agent, strlen(user_agent));
-    Rio_writen(clientfd, (void *)accept_str, strlen(accept_str));
-    Rio_writen(clientfd, (void *)accept_encoding, strlen(accept_encoding));
-    Rio_writen(clientfd, (void *)conn_str, strlen(conn_str));
-    Rio_writen(clientfd, (void *)proxy_conn, strlen(proxy_conn));
-    Rio_writen(clientfd, requesthdrs, strlen(requesthdrs));
-    
-    //printf("Requesthdrs Line is: %s\n", requesthdrs);
-    
-    Rio_writen(clientfd, "\r\n", 2);
-    
-    
-    
-    
-    
+    if (server == -2){
+        proxyerror(client, uri, "404", "Not found",
+                    "Tiny Proxy got DNS (gethostbyname) error");
+        //Close(server);
+        Close(client);
+        return NULL;
+    }
+    if (server == -1){
+        proxyerror(client, uri, "403", "Forbidden",
+                   "Tiny Proxy cannot connect server");
+        //Close(server);
+        Close(client);
+        return NULL;
+    }
 
-	//int listenfd = Open_listenfd(80);
+    sprintf(buf, "GET %s HTTP/1.0\r\n", pathname);
+    sprintf(buf, "%s%s", buf, user_agent);
+    sprintf(buf, "%s%s", buf, accept_str);
+    sprintf(buf, "%s%s", buf, accept_encoding);
+    sprintf(buf, "%s%s", buf, conn_str);
+    sprintf(buf, "%s%s", buf, proxy_conn);
+    if (rio_writen(server, buf, strlen(buf)) < 0) {
+        Close(client);
+        Close(server);
+        return NULL;
+    }
+    if (rio_writen(server, requesthdrs, strlen(requesthdrs)) < 0) {
+        Close(client);
+        Close(server);
+        return NULL;
+    }
+    if (rio_writen(server, "\r\n", 2) < 0) {
+        Close(client);
+        Close(server);
+        return NULL;
+    }
     
     rio_t rio2;
     
     char head[MAXBUF];
     char body[MAX_OBJECT_SIZE];
-    int bodysize = -1;
+    int bodysize;
     int len;
     
     memset(head, 0, sizeof(head));
     memset(body, 0, sizeof(body));
+    memset(buf, 0, sizeof(buf));
+    Rio_readinitb(&rio2, server);
     
-    Rio_readinitb(&rio2, clientfd);
-    
-    while(1){
-        Rio_readlineb(&rio2, buf, MAXLINE);
+    //read from the sever, then write on the client
+    //read header
+    while((strcmp(buf, "\r\n") != 0) && (strcmp(buf, "\n") != 0)){
+        if (Rio_readlineb(&rio2, buf, MAXLINE) < 0){
+            Close(client);
+            Close(server);
+            return NULL;
+        }
         sprintf(head, "%s%s", head, buf);
         //printf("BUF: %s\n", buf);
-        if((strcmp(buf, "\r\n") == 0) || (strcmp(buf, "\n") == 0))
-            break;
+        //if((strcmp(buf, "\r\n") == 0) || (strcmp(buf, "\n") == 0))
+        //    break;
     }
     
-    Rio_writen(fd, head, strlen(head));
+    //write header
+    if (rio_writen(client, head, strlen(head)) < 0) {
+        Close(client);
+        Close(server);
+        return NULL;
+    }
     
+    //printf("HEAD: %s\n", head);
+    
+    //read and write body
     bodysize = 0;
     while((len = Rio_readnb(&rio2, body, MAX_OBJECT_SIZE)) > 0){
         //printf("BODY: %s\n", body);
-        Rio_writen(fd, body, len);
+        if (rio_writen(client, body, len) < 0) {
+            Close(client);
+            Close(server);
+            return NULL;
+        }
         bodysize += len;
     }
     
-	/*while((n = Rio_readlineb(&rio2,buf,MAXLINE)) != 0){
-		printf("%s\n", buf);
-		Rio_writen(fd,buf,n);
-	}*/
-	Close(fd);
-    Close(clientfd);
-	//read_requesthdrs(&rio, clientfd);
-	
-
-
-
-
-
+	Close(client);
+    Close(server);
+    return NULL;
 }
 
-int read_requesthdrs(rio_t *rp, char *host, char *requesthdrs)
+int read_requesthdrs(rio_t *rio, char *hostname, char *hdrs)
 {
     char buf[MAXLINE];
     
-    char ignore[5][20] = {"User-Agent:", "Accept:", "Accept-Encoding:", "Connection:", "Proxy-Connection:"};
-    int skim;
+    int ignore;
     int hostexist = 0;
     int len = 0;
-    int buflen, i;
+    int buflen;
     
-    while(1) {
-        if (Rio_readlineb(rp, buf, MAXLINE-2) < 0)
-            return -1;
-        if (strncmp(buf, "\r\n", 2) == 0 || strncmp(buf, "\n", 1) == 0)
-            break;
+    //while(1) {
+    while((strcmp(buf, "\r\n") != 0) && (strcmp(buf, "\n") != 0)){
+        if (Rio_readlineb(rio, buf, MAXLINE-2) < 0)
+            return -1; //can't read header
+        
+        //if (strncmp(buf, "\r\n", 2) == 0 || strncmp(buf, "\n", 1) == 0)
+        //    break;
+        
         buflen = strlen(buf);
-        //skim the specified fields
-        skim = 0;
-        for (i = 0; i < 5; i++)
-            if (!strncasecmp(buf, ignore[i], strlen(ignore[i]))) {
-                skim = 1;
-                break;
-            }
-        if (skim) continue;
-        if (!strncasecmp(buf, "Host: ", 5))
+
+        ignore = 0;
+        if (strncasecmp(buf,"User-Agent:",11) == 0)
+            ignore = 1;
+        if (strncasecmp(buf,"Accept:",7) == 0)
+            ignore = 1;
+        if (strncasecmp(buf,"Accept-Encoding:",16) == 0)
+            ignore = 1;
+        if (strncasecmp(buf,"Connection:",11) == 0)
+            ignore = 1;
+        if (strncasecmp(buf,"Proxy-Connection:",17) == 0)
+            ignore = 1;
+        
+        if (ignore) continue;
+        
+        if (!strncasecmp(buf, "Host:", 5))
             hostexist = 1;
+        
         // adjust '\n' to "\r\n"
         if (buf[buflen-2] != '\r') {
             buf[buflen-1] = '\r';
@@ -272,22 +245,23 @@ int read_requesthdrs(rio_t *rp, char *host, char *requesthdrs)
         
         len += buflen;
         if (len < MAXBUF) {
-            strcpy(requesthdrs, buf);
-            requesthdrs += buflen;
+            strcpy(hdrs, buf);
+            hdrs += buflen;
         }
         else
-            return 0;
+            return 0; //header too large
     }
-    if (!hostexist) {
-        len += 7+strlen(host);
+    
+    if (hostexist == 0) {
+        len += 7+strlen(hostname);
         if (len < MAXBUF) {
-            strcpy(requesthdrs, "Host: ");
-            requesthdrs += 6;
-            strcpy(requesthdrs, host);
-            strcpy(requesthdrs + strlen(host), "\r\n");
+            strcpy(hdrs, "Host: ");
+            hdrs += 6;
+            strcpy(hdrs, hostname);
+            strcpy(hdrs + strlen(hostname), "\r\n");
         }
         else
-            return 0;
+            return 0; //header too large
     }
     return 1;
 }
@@ -331,32 +305,42 @@ int parse_uri(char *uri, char *hostname, char *pathname, int *port)
     
     if (*hostend == ':')
         *port = atoi(hostend + 1);
-    
-    /*char buf[MAXLINE];
-    
-    // if the uri doesn't begin with "http:", error
-    if( (strncasecmp(uri, "http://", 7)) != 0)
-    {
-        return 0;
-    }
-    else{
-        strcpy(buf, uri+7);
-    }
-    
-    
-    if( strstr(buf, "/") == NULL){
-        // no path exist
-        strcpy(pathname, "/");
-        strcpy(hostname, buf);
-    }
-    else{
-        int hostlen = strcspn(buf, "/");
-        strcpy(pathname, buf + hostlen);
-        strncpy(hostname, buf, hostlen);
-        hostname[hostlen] = '\0';
-    }*/
-	
-	//printf("hostname %s, pathname %s\n", hostname, pathname);
 	
     return 1;
 }
+
+void proxyerror(int fd, char *cause, char *errnum,
+                 char *shortmsg, char *longmsg)
+{
+    char buf[MAXLINE], body[MAXBUF];
+    
+    /* Build the HTTP response body */
+    sprintf(body, "<html><title>Tiny Proxy Error</title>");
+    sprintf(body, "%s<body bgcolor=""ffffff"">\r\n", body);
+    sprintf(body, "%s%s: %s\r\n", body, errnum, shortmsg);
+    sprintf(body, "%s<p>%s: %s\r\n", body, longmsg, cause);
+    sprintf(body, "%s<hr><em>The Tiny Proxy, developed by Qin Liu & Shuda Mo </em>\r\n", body);
+    
+    /* Print the HTTP response */
+    sprintf(buf, "HTTP/1.0 %s %s\r\n", errnum, shortmsg);
+    
+    if (rio_writen(fd, buf, strlen(buf)) < 0){
+        //Close(fd);
+        return;
+    }
+    sprintf(buf, "Content-type: text/html\r\n");
+    if (rio_writen(fd, buf, strlen(buf)) < 0){
+        //Close(fd);
+        return;
+    }
+    sprintf(buf, "Content-length: %d\r\n\r\n", (int)strlen(body));
+    if (rio_writen(fd, buf, strlen(buf)) < 0){
+        //Close(fd);
+        return;
+    }
+    if (rio_writen(fd, body, strlen(buf)) < 0){
+        //Close(fd);
+        return;
+    }
+}
+
